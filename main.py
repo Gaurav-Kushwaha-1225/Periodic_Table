@@ -42,11 +42,7 @@ class HomeScreen(MDScreen):
             name='Dictionary', text='Dictionary', icon='table')
         dict_nav_item.add_widget(Dictionary())
         BottomBar.add_widget(dict_nav_item)
-
-        desc_nav_item = MDBottomNavigationItem(
-            name='Description', text='Description', icon='widgets')
-        BottomBar.add_widget(desc_nav_item)
-
+        
         # Add text_color_normal after adding all the items
         BottomBar.text_color_normal = get_color_from_hex("#3A1B2F")
 
