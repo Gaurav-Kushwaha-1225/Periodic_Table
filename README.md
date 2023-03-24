@@ -18,3 +18,8 @@ This project uses the following Python packages:
 • Kivy
 
 • Python 3.10.0
+
+# Acknowledgements
+This project was inspired by the Periodic Table App developed by chernykh technology, available on the App Store. 
+
+The periodic table data is sourced from the https://github.com/Bowserinator/Periodic-Table-JSON website.
