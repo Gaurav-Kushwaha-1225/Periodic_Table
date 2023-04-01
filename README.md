@@ -1,10 +1,10 @@
-#Python Periodic Table
+# Python Periodic Table
 
 Periodic Table - This is a Python project for displaying the periodic table of elements using the Kivy framework. The periodic table is a graphical representation of the chemical elements, arranged in order of their atomic number, electron configurations, and chemical properties. It is a long-form periodic table approved by the International Union of Pure and Applied Chemistry (IUPAC).
 
 
 
-##Features
+## Features
 
 - Displays the periodic table with a detailed description of elements including physical and chemical properties.
 
@@ -15,7 +15,7 @@ Periodic Table - This is a Python project for displaying the periodic table of e
 - It can also be converted to an .apk file for an Android Device.
 
 
-##Dependencies
+## Dependencies
 
 This project uses the following Python packages:
 
@@ -29,7 +29,7 @@ This project was inspired by the Periodic Table App developed by chernykh techno
 
 The periodic table data is sourced from the https://github.com/Bowserinator/Periodic-Table-JSON website.
 
-##Screenshots
+## Screenshots
 
 ![Main Screen](https://user-images.githubusercontent.com/117214772/227645345-f05cc96c-b5cf-4e05-a9a6-ab5d6dab12e4.png)
 
