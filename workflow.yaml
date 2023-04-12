@@ -3,7 +3,7 @@ application:
   name: Periodic Table
   language: 'golang:1.17'
   ports:
-    - port: 80
+    - port: 8000
       service: true
       ingress: true
       ingressPath: /
