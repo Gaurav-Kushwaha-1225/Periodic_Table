@@ -1,6 +1,7 @@
 version: 0.1
 application:
   name: Periodic Table
+  language: 'golang:1.17'
   ports:
     - port: 80
       service: true
