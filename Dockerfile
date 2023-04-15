@@ -1,11 +1,4 @@
 FROM python:3.10
 
-ADD main.py .
-ADD elements.json .
-ADD dict.json .
+RUN pip install kivy kivymd
 
-COPY requirements.txt .
-
-RUN pip install -r requirements.txt
-
-CMD [ "python", "./main.py" ]
