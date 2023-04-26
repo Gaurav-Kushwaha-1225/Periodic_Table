@@ -1,13 +1,11 @@
-from kivy.uix.recycleboxlayout import RecycleBoxLayout
-from kivy.uix.recycleview import RecycleView
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.app import MDApp
 from kivy.core.window import Window
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.scrollview import MDScrollView
 from kivymd.uix.label import MDLabel
-from kivy.properties import ObjectProperty, StringProperty, NumericProperty, ColorProperty, ListProperty
-from kivymd.uix.button import MDRectangleFlatButton, MDIconButton, MDRoundFlatIconButton, MDFillRoundFlatButton
+from kivy.properties import ObjectProperty, StringProperty
+from kivymd.uix.button import MDRectangleFlatButton, MDRoundFlatIconButton
 from kivymd.uix.dialog import MDDialog
 from kivy.utils import rgba
 from kivy.storage.jsonstore import JsonStore
@@ -15,13 +13,14 @@ from kivymd.uix.card import MDCard
 from kivymd.uix.screenmanager import MDScreenManager
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.stacklayout import MDStackLayout
-from kivymd.uix.textfield import MDTextField
 from kivymd.uix.transition import MDFadeSlideTransition
 from kivymd.uix.toolbar import MDTopAppBar
 from kivymd.uix.bottomnavigation import MDBottomNavigation, MDBottomNavigationItem
 from kivymd.uix.card import MDSeparator
-from kivymd.uix.list import MDList, TwoLineListItem, OneLineListItem, ILeftBody, TwoLineAvatarListItem
+from kivymd.uix.list import MDList, TwoLineListItem, TwoLineAvatarListItem
 from kivy.lang import Builder
+from kivy.uix.image import AsyncImage
+
 
 Builder.load_string(
     '''
@@ -35,6 +34,7 @@ Builder.load_string(
             id: search_top_bar
             halign: "left"
             left_action_items: [["arrow-left", lambda x: root.change2()]]
+            md_bg_color: hex("#630436")
     
         MDBoxLayout:
             padding: 10
@@ -46,7 +46,7 @@ Builder.load_string(
             MDTextField:
                 id: field
                 hint_text: "Search Element Name "
-                on_text: root.set_list_md_icons(self.text, True)
+                on_text: root.set_list_md_icons(self.text)
                 
         MDBoxLayout:
             orientation: 'vertical'
@@ -95,11 +95,12 @@ class HomeScreen(MDScreen):
 
         # TopAppBar
         TopBar = MDTopAppBar(title="[font=arlrdbd.ttf][size=35][b]Periodic Table[/b][/size][/font]",
-                             right_action_items=[["sort-variant", lambda x: self.show0()]])
-
+                             right_action_items=[["sort-variant", lambda x: self.show0()]], md_bg_color=rgba("#630436"))
+        
         # BottomAppBar
         BottomBar = MDBottomNavigation(panel_color=rgba(
-            "#663AB7"), text_color_active=rgba("FFC7F6"))
+            "#630436"), text_color_active=rgba("#E39FF6"), widget_style="android", radius=20, padding=20, selected_color_background=rgba("#A1045A"))
+        BottomBar.mode = "legacy"
 
         home_nav_item = MDBottomNavigationItem(
             name='Element_screen', text='Periodic Table', icon='periodic-table')
@@ -117,7 +118,7 @@ class HomeScreen(MDScreen):
         BottomBar.add_widget(search_nav_item)
 
         # Add text_color_normal after adding all the items
-        BottomBar.text_color_normal = rgba("3A1B2F")
+        BottomBar.text_color_normal = rgba("#E39FF6")
 
         # Adding widgets to HomePage
         box.add_widget(TopBar)
@@ -138,7 +139,7 @@ class HomeScreen(MDScreen):
 class Element_Description(MDScreen):
 
     def __init__(self, *args, **kwargs):
-        global TopBar0, label1, label2, card1, overview, e_val_label, p_val_label, n_val_label, property, atomic
+        global TopBar0, label1, label2, card1, overview, e_val_label, p_val_label, n_val_label, img, img_lab, property, atomic
         super(Element_Description, self).__init__(*args, **kwargs)
 
         # OuterMost box
@@ -146,7 +147,7 @@ class Element_Description(MDScreen):
 
         # Header or TopAppBar
         TopBar0 = MDTopAppBar(left_action_items=[
-            ["arrow-left", lambda x: self.change1()]])
+            ["arrow-left", lambda x: self.change1()]], md_bg_color=rgba("#630436"))
 
         # main box Layout
         MainBox = MDBoxLayout(orientation="vertical", padding=8,
@@ -231,6 +232,23 @@ class Element_Description(MDScreen):
         box3.add_widget(p_val)
         box3.add_widget(n_val)
 
+        # BoxLayout (box_img) for image
+        img_box1 = MDBoxLayout()
+        img_label = MDCard(md_bg_color=rgba(
+            "#000080"), size_hint=(None, None), height=40, width=110)
+        img_label.add_widget(MDLabel(
+            text="[size=22sp][color=#FFFFFF][b]   IMAGE:[/b][/color][/size]", markup=True, halign="left"))
+
+        img_box2 = MDBoxLayout(pos_hint={"center_x":0.5}, spacing=25, padding=25)
+        img = AsyncImage(size_hint=(None,None), height=300, width=300)
+        img_lab = MDLabel(markup=True)
+
+        img_box1.adaptive_height = 40
+        img_box2.adaptive_height = img.height
+        img_box1.add_widget(img_label)
+        img_box2.add_widget(img)
+        img_box2.add_widget(img_lab)
+
         # BoxLayout (box4) for properties
         property_box1 = MDBoxLayout()
         property_label = MDCard(md_bg_color=rgba(
@@ -271,6 +289,8 @@ class Element_Description(MDScreen):
         OuterBox.add_widget(box3)
         OuterBox.add_widget(MDSeparator(color=(0, 0, 0, 0)))
         OuterBox.add_widget(MDSeparator())
+        OuterBox.add_widget(img_box1)
+        OuterBox.add_widget(img_box2)
         OuterBox.add_widget(property_box1)
         OuterBox.add_widget(property_box2)
         OuterBox.add_widget(atomic_box1)
@@ -298,6 +318,7 @@ class Element_Description(MDScreen):
 class MyScreenManager(MDScreenManager):
     home_screen = ObjectProperty(None)
     element_screen = ObjectProperty(None)
+    element_screen_1 = ObjectProperty(None)
     search_screen = ObjectProperty(None)
 
 
@@ -314,11 +335,13 @@ class PeriodicTable(MDApp):
         screen_manager = MyScreenManager(transition=MDFadeSlideTransition())
         screen_manager.home_screen = HomeScreen(name="Screen 1")
         screen_manager.element_screen = Element_Description(name="Screen 2")
+        screen_manager.element_screen_1 = Element_Description_1(name="Screen 4")
         screen_manager.search_screen = Search_Description(name="Screen 3")
 
         screen_manager.add_widget(screen_manager.home_screen)
         screen_manager.add_widget(screen_manager.search_screen)
         screen_manager.add_widget(screen_manager.element_screen)
+        screen_manager.add_widget(screen_manager.element_screen_1)
 
     def build(self):
         return screen_manager
@@ -452,6 +475,9 @@ class Elements_Portion(MDScreen):
         p_val_label.text = f"[size=25sp][color=#FBB917][b]{value['number']}[/b][/color][/size]"
         n_val_label.text = f"[size=25sp][color=#3944BC][b]{round(value['atomic_mass']) - value['number']}[/b][/color][/size]"
 
+        img.source = value["image"]["url"]
+        img_lab.text = f"[b][size=25sp][color=#F8EEEC][font=arlrdbd.ttf]{value['summary']}[/font][/color][/size][/b]"
+
         property.add_widget(
             TwoLineListItem(text="[color=#FFFFFF][b]Atomic Number:[/b][/color]", secondary_text=f"{value['number']}",
                             secondary_text_color=(
@@ -572,42 +598,42 @@ class Dictionary(MDScreen):
     def __init__(self, *args, **kwargs):
         super(Dictionary, self).__init__(*args, **kwargs)
         scroll = MDScrollView()
-        box0 = MDBoxLayout(orientation="vertical",
+        box0 = MDGridLayout(rows=2, cols=3,
                            padding=11, adaptive_height=True, spacing=15)
 
         # Electronic Configuration
         card1 = MDCard(orientation="vertical", md_bg_color=rgba(
             "#20242b"), line_color=rgba(
-            "#FF006B"), style="elevated", size_hint=(1, None), height="490dp", line_width=2, radius=20, padding=15)
+            "#FF006B"), style="elevated", size_hint=(1, None), height=450, line_width=2, radius=20, padding=15, width=500)
         head0 = MDLabel(
-            text=f"[u][size=30sp][b]Electronic Configuration[/b][/size][/u]\n\n[size=15sp]{self.data['Electronic Configuration']}[/size]",
+            text=f"[u][size=30sp][b]Electronic Configuration[/b][/size][/u]\n\n[size=17sp]{self.data['Electronic Configuration']}[/size]",
             markup=True, halign="center", valign="center")
         card1.add_widget(head0)
 
         # Electronegativity
         card2 = MDCard(orientation="vertical", md_bg_color=rgba(
             "#20242b"), line_color=rgba(
-            "#00ABFF"), style="elevated", size_hint=(1, None), height="505dp", line_width=2, radius=20, padding=15)
+            "#00ABFF"), style="elevated", size_hint=(1, None), height=450, line_width=2, radius=20, padding=15)
         head1 = MDLabel(
-            text=f"[u][size=30sp][b]Electronegativity[/b][/size][/u]\n\n[size=15sp]{self.data['Electronegativity']}[/size]",
+            text=f"[u][size=30sp][b]Electronegativity[/b][/size][/u]\n\n[size=17sp]{self.data['Electronegativity']}[/size]",
             markup=True, halign="center", valign="center")
         card2.add_widget(head1)
 
         # Electronegativity
         card3 = MDCard(orientation="vertical", md_bg_color=rgba(
             "#20242b"), line_color=rgba(
-            "#FFFF9C"), style="elevated", size_hint=(1, None), height="525dp", line_width=2, radius=20, padding=15)
+            "#FFFF9C"), style="elevated", size_hint=(1, None), height=450, line_width=2, radius=20, padding=15)
         head2 = MDLabel(
-            text=f"[u][size=30sp][b]Ionization  Potential[/b][/size][/u]\n\n[size=15sp]{self.data['ionization_energies']}[/size]",
+            text=f"[u][size=30sp][b]Ionization  Potential[/b][/size][/u]\n\n[size=17sp]{self.data['ionization_energies']}[/size]",
             markup=True, halign="center", valign="center")
         card3.add_widget(head2)
 
         # standard_electrode_potential
         card4 = MDCard(orientation="vertical", md_bg_color=rgba(
             "#20242b"), line_color=rgba(
-            "#00FFFF"), style="elevated", size_hint=(1, None), height="595dp", line_width=2, radius=20, padding=15)
+            "#00FFFF"), style="elevated", size_hint=(1, None), height=450, line_width=2, radius=20, padding=15)
         head3 = MDLabel(
-            text=f"[u][size=30sp][b]Standard Electrode Potential[/b][/size][/u]\n\n[size=15sp]{self.data['standard_electrode_potential']}[/size]",
+            text=f"[u][size=30sp][b]Standard Electrode Potential[/b][/size][/u]\n\n[size=17sp]{self.data['standard_electrode_potential']}[/size]",
             markup=True, halign="center", valign="center")
         card4.add_widget(head3)
 
@@ -625,6 +651,7 @@ def SymbolToIndex(symbol):
     for i in data:
         if i["symbol"] == symbol:
             return data.index(i)
+
 
 def NameToIndex(name):
     store = JsonStore("elements.json")
@@ -682,6 +709,8 @@ class Search(MDScreen):
     def search_choice(self, btn_obj):
         screen_manager.get_screen(
             "Screen 3").ids.search_top_bar.title = f"[font=arlrdbd.ttf][size=35][b]Search By {btn_obj.text.strip()}[/b][/size][/font]"
+        screen_manager.get_screen(
+            "Screen 3").ids.field.hint_text = f" Search By {btn_obj.text.strip()}"
         screen_manager.current = "Screen 3"
 
 
@@ -706,7 +735,7 @@ class Search_Description(MDScreen):
          'CAS Number': j['CAS Number'],
          } for j in data]
 
-    def set_list_md_icons(self, text="", search=False):
+    def set_list_md_icons(self, text=""):
         def add_icon_item(text1, text2):
             self.ids.rv.data.append(
                 {"viewclass": "CustomListItem",
@@ -715,17 +744,192 @@ class Search_Description(MDScreen):
             )
 
         search_category = (self.ids.search_top_bar.title)[40:-18].strip()
-
         self.ids.rv.data = []
         for element in self.names:
-            if search:
-                if text in self.data_list[self.names.index(element)][search_category]:
-                    add_icon_item(element['text1'], element['text2'])
-            else:
+            if text in self.data_list[self.names.index(element)][search_category]:
                 add_icon_item(element['text1'], element['text2'])
 
     def change2(self):
         self.manager.current = "Screen 1"
+
+
+class Element_Description_1(MDScreen):
+
+    def __init__(self, *args, **kwargs):
+        global TopBar0_1, label1_1, label2_1, card1_1, overview_1, e_val_label_1, p_val_label_1, n_val_label_1, img_1, img_lab_1, property_1, atomic_1
+        super(Element_Description_1, self).__init__(*args, **kwargs)
+
+        # OuterMost box
+        OuterMostBox = MDBoxLayout(orientation="vertical")
+
+        # Header or TopAppBar
+        TopBar0_1 = MDTopAppBar(left_action_items=[
+            ["arrow-left", lambda x: self.change1()]], md_bg_color=rgba("#630436"))
+
+        # main box Layout
+        MainBox = MDBoxLayout(orientation="vertical", padding=8,
+                              spacing=8)
+
+        # Main Scroll View
+        scroll = MDScrollView()
+
+        # Creating Outer BoxLayout
+        OuterBox = MDBoxLayout(orientation="vertical",
+                               spacing=8, adaptive_height=True)
+
+        # 1st MDCard
+        card1_1 = MDCard(md_bg_color=rgba(
+            "#20242b"), style="elevated", size_hint=(1, None), height="150dp")
+        # 1 label and 1 BoxLayout in MDcard
+        label1_1 = MDLabel(markup=True, halign="left")
+        box1 = MDBoxLayout(orientation="vertical")
+
+        # 2 Labels in BoxLayout present in MDCard
+        label2_1 = MDLabel(markup=True, halign="center", valign="bottom")
+        box1.add_widget(MDLabel(text=""))  # 2nd Label
+        box1.add_widget(label2_1)
+        card1_1.add_widget(label1_1)
+        card1_1.add_widget(box1)
+
+        # Overview of the Element
+        # Overview List Item
+        overview_box1 = MDBoxLayout()
+        overview_label = MDCard(md_bg_color=rgba(
+            "#A91B0D"), size_hint=(None, None), height=40, width=145)
+        overview_label.add_widget(MDLabel(
+            text="[size=22sp][color=#FFFFFF][b]   OVERVIEW:[/b][/color][/size]", markup=True, halign="left"))
+
+        overview_box2 = MDBoxLayout()
+        overview_1 = MDList()
+        overview_box1.adaptive_height = 40
+        overview_box2.adaptive_height = overview_1.adaptive_height
+        overview_box1.add_widget(overview_label)
+        overview_box2.add_widget(overview_1)
+
+        # BoxLayout(box2) for Electrons, Protons And Neutrons
+        box2 = MDBoxLayout(orientation="horizontal", spacing=6)
+        box3 = MDBoxLayout(orientation="horizontal", spacing=6)
+
+        electron = MDCard(md_bg_color=rgba(
+            "#D0312D"), size_hint=(1, None), height=50)
+        electron_label = MDLabel(
+            text="[size=18sp][color=#FFFFFF][b]ELECTRONS:[/b][/color][/size]", markup=True, halign="center")
+        electron.add_widget(electron_label)
+        e_val = MDCard(md_bg_color=rgba(
+            "#20242B"), line_color=rgba("D0312D"), size_hint=(1, None), height=50)
+        e_val_label_1 = MDLabel(markup=True, halign="center", line_width=5)
+        e_val.add_widget(e_val_label_1)
+
+        proton = MDCard(md_bg_color=rgba(
+            "#FBB917"), size_hint=(1, None), height=50)
+        proton_label = MDLabel(
+            text="[size=18sp][color=#FFFFFF][b]PROTONS:[/b][/color][/size]", markup=True, halign="center")
+        proton.add_widget(proton_label)
+        p_val = MDCard(md_bg_color=rgba(
+            "#20242B"), line_color=rgba("FBB917"), size_hint=(1, None), height=50)
+        p_val_label_1 = MDLabel(markup=True, halign="center", line_width=5)
+        p_val.add_widget(p_val_label_1)
+
+        neutron = MDCard(md_bg_color=rgba(
+            "#3944BC"), size_hint=(1, None), height=50)
+        neutron_label = MDLabel(
+            text="[size=18sp][color=#FFFFFF][b]NEUTRONS:[/b][/color][/size]", markup=True, halign="center")
+        neutron.add_widget(neutron_label)
+        n_val = MDCard(md_bg_color=rgba(
+            "#20242B"), line_color=rgba("3944BC"), size_hint=(1, None), height=50)
+        n_val_label_1 = MDLabel(markup=True, halign="center", line_width=5)
+        n_val.add_widget(n_val_label_1)
+
+        box2.adaptive_height = 50
+        box3.adaptive_height = 50
+        box2.add_widget(electron)
+        box2.add_widget(proton)
+        box2.add_widget(neutron)
+        box3.add_widget(e_val)
+        box3.add_widget(p_val)
+        box3.add_widget(n_val)
+
+        # BoxLayout (box_img) for image
+        img_box1 = MDBoxLayout()
+        img_label = MDCard(md_bg_color=rgba(
+            "#000080"), size_hint=(None, None), height=40, width=110)
+        img_label.add_widget(MDLabel(
+            text="[size=22sp][color=#FFFFFF][b]   IMAGE:[/b][/color][/size]", markup=True, halign="left"))
+
+        img_box2 = MDBoxLayout(pos_hint={"center_x":0.5}, spacing=25, padding=25)
+        img_1 = AsyncImage(size_hint=(None,None), height=300, width=300)
+        img_lab_1 = MDLabel(markup=True)
+
+        img_box1.adaptive_height = 40
+        img_box2.adaptive_height = img_1.height
+        img_box1.add_widget(img_label)
+        img_box2.add_widget(img_1)
+        img_box2.add_widget(img_lab_1)
+
+        # BoxLayout (box4) for properties
+        property_box1 = MDBoxLayout()
+        property_label = MDCard(md_bg_color=rgba(
+            "#028A0F"), size_hint=(None, None), height=40, width=165)
+        property_label.add_widget(MDLabel(
+            text="[size=22sp][color=#FFFFFF][b]   PROPERTIES:[/b][/color][/size]", markup=True, halign="left"))
+
+        property_box2 = MDBoxLayout()
+        property_1 = MDList()
+
+        property_box1.adaptive_height = 40
+        property_box2.adaptive_height = property_1.adaptive_height
+        property_box1.add_widget(property_label)
+        property_box2.add_widget(property_1)
+
+        # BoxLayout (box5) for atomic properties
+        atomic_box1 = MDBoxLayout()
+        atomic_label = MDCard(md_bg_color=rgba(
+            "#FF1694"), size_hint=(None, None), height=40, width=250)
+        atomic_label.add_widget(MDLabel(
+            text="[size=22sp][color=#FFFFFF][b]   ATOMIC PROPERTIES:[/b][/color][/size]", markup=True, halign="left"))
+
+        atomic_box2 = MDBoxLayout()
+        atomic_1 = MDList()
+
+        atomic_box1.adaptive_height = 40
+        atomic_box2.adaptive_height = atomic_1.adaptive_height
+        atomic_box1.add_widget(atomic_label)
+        atomic_box2.add_widget(atomic_1)
+
+        # Adding widgets to the Outer BoxLayout
+        OuterBox.add_widget(card1_1)
+        OuterBox.add_widget(MDSeparator())
+        OuterBox.add_widget(overview_box1)
+        OuterBox.add_widget(overview_box2)
+        OuterBox.add_widget(MDSeparator())
+        OuterBox.add_widget(box2)
+        OuterBox.add_widget(box3)
+        OuterBox.add_widget(MDSeparator(color=(0, 0, 0, 0)))
+        OuterBox.add_widget(MDSeparator())
+        OuterBox.add_widget(img_box1)
+        OuterBox.add_widget(img_box2)
+        OuterBox.add_widget(property_box1)
+        OuterBox.add_widget(property_box2)
+        OuterBox.add_widget(atomic_box1)
+        OuterBox.add_widget(atomic_box2)
+
+        # Adding widgets to the Main ScrollLayout
+        OuterMostBox.add_widget(TopBar0_1)
+        OuterMostBox.add_widget(MainBox)
+
+        # Adding widgets to the Main ScrollLayout
+        MainBox.add_widget(scroll)
+        scroll.add_widget(OuterBox)
+
+        # Adding everything to MDScreen
+        self.add_widget(OuterMostBox)
+
+    def change1(self, *args):
+        overview_1.clear_widgets()
+        property_1.clear_widgets()
+        atomic_1.clear_widgets()
+
+        self.manager.current = "Screen 3"
 
 
 class CustomListItem(TwoLineAvatarListItem):
@@ -741,118 +945,120 @@ class CustomListItem(TwoLineAvatarListItem):
         index = NameToIndex(name)
         value = self.data[index]
 
-        TopBar0.title = f"[font=arlrdbd.ttf][size=35][b]{value['name']}[/b][/size][/font]"
-        card1.line_color = rgba(value['cpk-hex'])
-        label1.text = f"[b][size=26sp]  {value['name']}[/size]\n[size=60sp] {value['symbol']}[/size]  [size=20sp]{value['number']}[/size]\n[size=22sp]  {round(value['atomic_mass'], 3)}[/size][/b] [size=18sp](g/mol)[/size]"
-        label2.text = f"[size=20sp][b][color={value['cpk-hex']}]{value['category'].upper()}[/color][/b][/size]"
+        TopBar0_1.title = f"[font=arlrdbd.ttf][size=35][b]{value['name']}[/b][/size][/font]"
+        card1_1.line_color = rgba(value['cpk-hex'])
+        label1_1.text = f"[b][size=26sp]  {value['name']}[/size]\n[size=60sp] {value['symbol']}[/size]  [size=20sp]{value['number']}[/size]\n[size=22sp]  {round(value['atomic_mass'], 3)}[/size][/b] [size=18sp](g/mol)[/size]"
+        label2_1.text = f"[size=20sp][b][color={value['cpk-hex']}]{value['category'].upper()}[/color][/b][/size]"
 
-        overview.add_widget(
+        overview_1.add_widget(
             TwoLineListItem(text="[b]English Name:[/b]", secondary_text=f"{value['name']}", secondary_text_color=(
                 1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5, divider="Inset",
                 _no_ripple_effect=True))
-        overview.add_widget(
+        overview_1.add_widget(
             TwoLineListItem(text="[b]Year Discovered:[/b]", secondary_text=f"{value['YearDiscovered']}",
                             secondary_text_color=(
                                 1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5, divider="Inset",
                             _no_ripple_effect=True))
-        overview.add_widget(TwoLineListItem(text="[b]Discovered By:[/b]", secondary_text=f"{value['discovered_by']}",
+        overview_1.add_widget(TwoLineListItem(text="[b]Discovered By:[/b]", secondary_text=f"{value['discovered_by']}",
                                             secondary_text_color=(
                                                 1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5,
                                             divider="Inset", _no_ripple_effect=True))
-        overview.add_widget(
+        overview_1.add_widget(
             TwoLineListItem(text="[b]Named By:[/b]", secondary_text=f"{value['named_by']}", secondary_text_color=(
                 1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5, divider="Inset",
                 _no_ripple_effect=True))
 
-        e_val_label.text = f"[size=25sp][color=#D0312D][b]{value['number']}[/b][/color][/size]"
-        p_val_label.text = f"[size=25sp][color=#FBB917][b]{value['number']}[/b][/color][/size]"
-        n_val_label.text = f"[size=25sp][color=#3944BC][b]{round(value['atomic_mass']) - value['number']}[/b][/color][/size]"
+        e_val_label_1.text = f"[size=25sp][color=#D0312D][b]{value['number']}[/b][/color][/size]"
+        p_val_label_1.text = f"[size=25sp][color=#FBB917][b]{value['number']}[/b][/color][/size]"
+        n_val_label_1.text = f"[size=25sp][color=#3944BC][b]{round(value['atomic_mass']) - value['number']}[/b][/color][/size]"
 
-        property.add_widget(
+        img_1.source = value["image"]["url"]
+        img_lab_1.text = f"[b][size=25sp][color=#F8EEEC][font=arlrdbd.ttf]{value['summary']}[/font][/color][/size][/b]"
+
+        property_1.add_widget(
             TwoLineListItem(text="[color=#FFFFFF][b]Atomic Number:[/b][/color]", secondary_text=f"{value['number']}",
                             secondary_text_color=(
                                 1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5, divider="Inset",
                             _no_ripple_effect=True))
-        property.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Atomic Weight (Atomic Mass):[/b][/color]",
+        property_1.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Atomic Weight (Atomic Mass):[/b][/color]",
                                             secondary_text=f"{round(value['atomic_mass'], 4)} (g/mol)",
                                             secondary_text_color=(
                                                 1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5,
                                             divider="Inset", _no_ripple_effect=True))
-        property.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Density:[/b][/color]",
+        property_1.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Density:[/b][/color]",
                                             secondary_text=f"{value['density']} (g/cm³)", secondary_text_color=(
                                                 1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5, divider="Inset",
                                             _no_ripple_effect=True))
-        property.add_widget(
+        property_1.add_widget(
             TwoLineListItem(text="[color=#FFFFFF][b]Phase:[/b][/color]", secondary_text=f"{value['phase']}",
                             secondary_text_color=(
                                 1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5, divider="Inset",
                             _no_ripple_effect=True))
-        property.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Melting Point:[/b][/color]",
+        property_1.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Melting Point:[/b][/color]",
                                             secondary_text=f"{value['melt']} [color=#028A0F]K[/color]",
                                             secondary_text_color=(
                                                 1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5,
                                             divider="Inset", _no_ripple_effect=True))
-        property.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Boiling Point:[/b][/color]",
+        property_1.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Boiling Point:[/b][/color]",
                                             secondary_text=f"{value['boil']} [color=#028A0F]K[/color]",
                                             secondary_text_color=(
                                                 1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5,
                                             divider="Inset", _no_ripple_effect=True))
-        property.add_widget(
+        property_1.add_widget(
             TwoLineListItem(text="[color=#FFFFFF][b]Period:[/b][/color]", secondary_text=f"{value['period']}",
                             secondary_text_color=(
                                 1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5, divider="Inset",
                             _no_ripple_effect=True))
-        property.add_widget(
+        property_1.add_widget(
             TwoLineListItem(text="[color=#FFFFFF][b]Group:[/b][/color]", secondary_text=f"{value['group']}",
                             secondary_text_color=(
                                 1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5, divider="Inset",
                             _no_ripple_effect=True))
-        property.add_widget(
+        property_1.add_widget(
             TwoLineListItem(text="[color=#FFFFFF][b]Block:[/b][/color]", secondary_text=f"{value['block']} - block",
                             secondary_text_color=(
                                 1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5, divider="Inset",
                             _no_ripple_effect=True))
 
-        atomic.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Oxidation States:[/b][/color]",
+        atomic_1.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Oxidation States:[/b][/color]",
                                           secondary_text=f"{value['OxidationStates']}", secondary_text_color=(
                                               1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5, divider="Inset",
                                           _no_ripple_effect=True))
-        atomic.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Electronic Configuration:[/b][/color]",
+        atomic_1.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Electronic Configuration:[/b][/color]",
                                           secondary_text=f"{value['electron_configuration_semantic']}",
                                           secondary_text_color=(
                                               1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5,
                                           divider="Inset", _no_ripple_effect=True))
-        atomic.add_widget(
+        atomic_1.add_widget(
             TwoLineListItem(text="[color=#FFFFFF][b]Molar Heat:[/b][/color]", secondary_text=f"{value['molar_heat']}",
                             secondary_text_color=(
                                 1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5, divider="Inset",
                             _no_ripple_effect=True))
-        atomic.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Bonding Type:[/b][/color]",
+        atomic_1.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Bonding Type:[/b][/color]",
                                           secondary_text=f"{value['BondingType']}", secondary_text_color=(
                                               1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5, divider="Inset",
                                           _no_ripple_effect=True))
-        atomic.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Electron Affinity:[/b][/color]",
+        atomic_1.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Electron Affinity:[/b][/color]",
                                           secondary_text=f"{value['electron_affinity']} (kJ/mol)",
                                           secondary_text_color=(
                                               1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5,
                                           divider="Inset", _no_ripple_effect=True))
-        atomic.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Electronegativity:[/b][/color]",
+        atomic_1.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Electronegativity:[/b][/color]",
                                           secondary_text=f"{value['electronegativity_pauling']}",
                                           secondary_text_color=(
                                               1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5,
                                           divider="Inset", _no_ripple_effect=True))
-        atomic.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Atomic Radius:[/b][/color]",
+        atomic_1.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Atomic Radius:[/b][/color]",
                                           secondary_text=f"{value['AtomicRadius']} pm", secondary_text_color=(
                                               1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5, divider="Inset",
                                           _no_ripple_effect=True))
-        atomic.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Van Der Waals Radius :[/b][/color]",
+        atomic_1.add_widget(TwoLineListItem(text="[color=#FFFFFF][b]Van Der Waals Radius :[/b][/color]",
                                           secondary_text=f"{value['VanDerWaalsRadius']} pm", secondary_text_color=(
                                               1, 1, 1, 1), font_style="H6", secondary_font_style="H6", radius=5, divider="Inset",
                                           _no_ripple_effect=True))
 
-        screen_manager.current = "Screen 2"
+        screen_manager.current = "Screen 4"
         
-
 
 if __name__ == '__main__':
     Window.maximize()
