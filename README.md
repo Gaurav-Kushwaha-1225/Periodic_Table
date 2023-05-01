@@ -42,23 +42,35 @@ The periodic table data is sourced from the https://github.com/Bowserinator/Peri
 
 ## Screenshots
 
+### Shows Different Categories.
 ![Categories](https://user-images.githubusercontent.com/117214772/235280912-6463b054-9d48-4494-839c-3c57f7508d0e.png)
 
+### Dictionary Feature
 ![Dictionary](https://user-images.githubusercontent.com/117214772/235280915-8e653462-bb41-448f-ac0a-4e4eb6fe495a.png)
 
+### Search through different options.
 ![Search](https://user-images.githubusercontent.com/117214772/235280925-0aea80cf-84b3-4f7a-85b2-cf4753867372.png)
 
+### Search by Name of Elements option.
 ![Search By Name](https://user-images.githubusercontent.com/117214772/235280929-46442ec0-20a4-4f0f-a7a0-04c94a84b211.png)
 
+### Search by Electronegativity of Elements option.
 ![Search By Electronegativity](https://user-images.githubusercontent.com/117214772/235280933-721a4b71-a51b-47fc-af20-8bd3f3a17b1a.png)
 
+### Elements properties and overview.
 ![Element (1)](https://user-images.githubusercontent.com/117214772/235280943-3731c693-e85b-4006-bd31-fe9cb211a216.png)
 
+### Elements Images and summary.
 ![Element (2)](https://user-images.githubusercontent.com/117214772/235280952-7cf41352-72e9-4b58-9ef8-935d0fa12214.png)
 
+### Elements properties
 ![Element (3)](https://user-images.githubusercontent.com/117214772/235280963-fc22cd27-20d6-4505-afe8-2a584ade84b9.png)
 
+### Elements atomic properties
+
 ![Element (4)](https://user-images.githubusercontent.com/117214772/235280968-339bb2b1-dfd3-4f68-bb5c-949ba6f561d7.png)
+
+### About, Links and Others Section.
 
 ![About and links](https://user-images.githubusercontent.com/117214772/235280971-ff5d563a-5cce-4cfe-9b58-f80f84dc1f89.png)
 
