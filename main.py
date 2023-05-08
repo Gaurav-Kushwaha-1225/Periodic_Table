@@ -447,6 +447,8 @@ class PeriodicTable(MDApp):
         screen_manager.add_widget(screen_manager.element_screen_1)
 
     def build(self):
+        self.title = "Periodic Table"
+        self.icon = "icon.png"
         return screen_manager
 
 
