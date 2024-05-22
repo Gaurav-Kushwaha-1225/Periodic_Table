@@ -25,9 +25,9 @@ Periodic Table - This is a Python project for displaying the periodic table of e
 
 This project uses the following Python packages:
 
-- KivyMD
+- KivyMD 1.1.1
 
-- Kivy
+- Kivy 2.1.0
 
 - Python 3.10.0
 
