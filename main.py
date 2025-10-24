@@ -860,10 +860,10 @@ class Search_Description(MDScreen):
                  'icon_text': icon_text}
             )
 
-        search_category = (self.ids.search_top_bar.title)[40:-18].strip()
+        search_category = (self.ids.search_top_bar.title)[53:-18].strip()
         self.ids.rv.data = []
         for element in self.names:
-            if text in self.data_list[self.names.index(element)][search_category]:
+            if text.lower() in self.data_list[self.names.index(element)][search_category].lower():
                 add_icon_item(element['text1'], element['text2'], element['color_icon'], element['icon_text'])
 
     def change2(self):
