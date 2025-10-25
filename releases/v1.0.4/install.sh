@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "╔══════════════════════════════════════════════════════════════╗"
-echo "║         Periodic Table v1.0.4 - Automated Installer         ║"
+echo "║         Periodic Table v1.0.4 - Automated Installer          ║"
 echo "╚══════════════════════════════════════════════════════════════╝"
 echo ""
 
