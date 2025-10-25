@@ -33,6 +33,42 @@ This project uses the following Python packages:
 
 - webbrowser
 
+## 📦 Installation
+
+### Ubuntu (Recommended)
+
+**Latest Release - v1.0.4**
+
+- Download and install the `.deb` package:
+
+- Download from GitHub Releases
+- Then install
+```
+sudo dpkg -i periodic-table_1.0.4_all.deb
+sudo apt-get install -f
+sudo pip3 install kivy kivymd --break-system-packages
+```
+
+- **Or use automated installer:**
+```
+Download install.sh from releases
+sudo bash install.sh
+```
+
+- **Or from source:**
+```
+git clone https://github.com/Gaurav-Kushwaha-1225/Periodic_Table.git
+cd Periodic_Table
+pip3 install kivy kivymd
+python3 main.py
+```
+
+### Launch
+
+- Search "Periodic Table" in Applications menu
+- Or run from terminal: `periodic-table`
+
+[View All Releases](https://github.com/Gaurav-Kushwaha-1225/Periodic_Table/releases)
 
 ## Acknowledgements
 This project was inspired by the Periodic Table App developed by chernykh technology, available on the App Store. 
