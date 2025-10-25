@@ -1,0 +1,33 @@
+#!/bin/bash
+set -e
+
+# Check if kivy is installed
+if ! python3 -c "import kivy" 2>/dev/null; then
+    echo "Installing Kivy and KivyMD dependencies..."
+    pip3 install kivy kivymd --break-system-packages 2>/dev/null || {
+        echo ""
+        echo "============================================"
+        echo "WARNING: Could not auto-install dependencies"
+        echo "Please manually install with:"
+        echo "  sudo pip3 install kivy kivymd --break-system-packages"
+        echo "============================================"
+        echo ""
+    }
+fi
+
+# Update icon cache
+if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+    gtk-update-icon-cache -f -t /usr/share/icons/hicolor 2>/dev/null || true
+fi
+
+# Update desktop database
+if command -v update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database /usr/share/applications 2>/dev/null || true
+fi
+
+# Update MIME database
+if command -v update-mime-database >/dev/null 2>&1; then
+    update-mime-database /usr/share/mime 2>/dev/null || true
+fi
+
+exit 0

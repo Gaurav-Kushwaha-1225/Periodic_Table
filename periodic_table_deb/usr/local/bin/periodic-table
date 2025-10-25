@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Change to application directory
+cd /usr/local/lib/periodic-table || exit 1
+
+# Set display and graphics environment
+export DISPLAY="${DISPLAY:-:0}"
+export KIVY_NO_CONFIG=1
+export KIVY_NO_FILELOG=1
+export KIVY_NO_CONSOLELOG=0
+
+# Force SDL2 window provider
+export KIVY_WINDOW=sdl2
+
+# Use system Python3 (not conda)
+/usr/bin/python3 main.py "$@" 2>&1
+
+exit $?

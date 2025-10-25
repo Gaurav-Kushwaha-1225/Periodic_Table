@@ -1,0 +1,15 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Periodic Table
+GenericName=Chemical Elements Reference
+Comment=Interactive periodic table with detailed element properties
+Exec=env KIVY_WINDOW=sdl2 /usr/local/bin/periodic-table
+Path=/usr/local/lib/periodic-table
+Icon=periodic-table
+Terminal=false
+Categories=Science;Education;
+Keywords=chemistry;elements;periodic;table;science;education;IUPAC;
+StartupNotify=true
+StartupWMClass=periodic-table
+X-GNOME-UsesNotifications=false

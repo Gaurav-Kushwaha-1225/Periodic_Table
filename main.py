@@ -175,11 +175,13 @@ class OtherScreen(MDScreen):
     store = JsonStore("assets/data/others.json")
     data = store.get("data")
 
-    main_box = MDBoxLayout(orientation='vertical', padding=10, spacing=10)
-    main_box.adaptive_height = True
 
     def __init__(self, *args, **kwargs):
         super(OtherScreen, self).__init__(*args, **kwargs)
+        
+        self.main_box = MDBoxLayout(orientation='vertical', padding=10, spacing=10)
+        self.main_box.adaptive_height = True
+
         about_header = CustomHeader(header="[size=30sp][font=assets/fonts/arlrdbd.ttf][b]  About:[/b][/font][/size]", color="#3DED97", size_hint_y=None, height=60, line_width=2, line_color=rgba("#26282A"))
         about_label = MDLabel(text=f"[font=assets/fonts/SegUIVar.ttf][size=23sp]{self.data['about']}[/size][/font]", markup=True, adaptive_height =True, valign='center')
 
@@ -475,12 +477,12 @@ class Elements_Portion(MDScreen):
     box2 = ["La-Lu", "Ac-Lr"]
     box_no = 0
 
-    grid = MDGridLayout(rows=11, cols=19, padding=9,
-                        spacing=9, size_hint_y=None, size_hint_x=None, adaptive_size=True)
-
     def __init__(self, *args, **kwargs):
         super(Elements_Portion, self).__init__(*args, **kwargs)
 
+        self.grid = MDGridLayout(rows=11, cols=19, padding=9,
+                        spacing=9, size_hint_y=None, size_hint_x=None, adaptive_size=True)
+        
         b = MDLabel(text="", size_hint=(None, None), size=("24dp", "24dp"))
         self.grid.add_widget(b)
 
@@ -772,7 +774,7 @@ def NameToIndex(name):
     for i in data:
         if i["name"] == name:
             return data.index(i)
-
+    return 0
 
 class Search(MDScreen):
     items = {" Name ": ["rename-box", "#E91E63"],
@@ -1060,7 +1062,9 @@ class CustomListItem(TwoLineAvatarListItem):
     data = store.get("data")["elements"]
 
     def playboy(self, instance):
-        name = instance.text[47:-41]
+        start = instance.text.find('[b]') + 3  # +3 to skip '[b]'
+        end = instance.text.find('[/b]')
+        name = instance.text[start:end]
         index = StringProperty()
         index = NameToIndex(name)
         value = self.data[index]

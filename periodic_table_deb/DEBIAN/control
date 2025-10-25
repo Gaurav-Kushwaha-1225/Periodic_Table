@@ -1,0 +1,22 @@
+Package: periodic-table
+Version: 1.0.4
+Section: science
+Priority: optional
+Architecture: all
+Depends: python3 (>= 3.8), python3-pip, libsdl2-2.0-0, libsdl2-image-2.0-0, libsdl2-mixer-2.0-0, libsdl2-ttf-2.0-0
+Maintainer: Gaurav Kushwaha <gaurav.kush1225@gmail.com>
+Homepage: https://github.com/Gaurav-Kushwaha-1225/Periodic_Table
+Description: Interactive periodic table application
+ A Kivy-based periodic table application displaying detailed properties
+ of chemical elements using the framework approved by the International
+ Union of Pure and Applied Chemistry (IUPAC).
+ .
+ Features:
+  - Interactive periodic table display with all 118 elements
+  - Detailed element properties (electron configuration, atomic weight, etc.)
+  - Search functionality by name, atomic number, electronegativity, etc.
+  - High-resolution element images
+  - Educational content and chemistry dictionary
+  - Clean, modern interface built with KivyMD
+ .
+ Perfect for students, educators, and chemistry enthusiasts.
